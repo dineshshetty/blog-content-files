@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Generated protobuf — rebuilt on first import via grpcio-tools
+common/sparkplug_b_pb2.py
+
+# macOS
+.DS_Store
+.AppleDouble
+*.icloud
+
+# Docker
+*.env
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs / tmp
+*.log

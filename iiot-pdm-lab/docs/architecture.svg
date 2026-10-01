@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="800" viewBox="0 0 1240 800" font-family="-apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#8b98a5"/>
+    </marker>
+    <marker id="arrR" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#f85149"/>
+    </marker>
+    <marker id="arrB" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#58a6ff"/>
+    </marker>
+  </defs>
+
+  <rect width="1240" height="800" fill="#0e1116"/>
+
+  <!-- title -->
+  <text x="40" y="52" fill="#e6edf3" font-size="26" font-weight="700">North Plant — IIoT Condition Monitoring</text>
+  <text x="40" y="78" fill="#7d8590" font-size="15">Data flow and attack surface of an MQTT / Sparkplug B predictive-maintenance stack</text>
+
+  <!-- ================= main pipeline ================= -->
+  <!-- PLC / VFD -->
+  <g>
+    <rect x="40" y="150" width="220" height="150" rx="10" fill="#161b22" stroke="#2ea043" stroke-width="1.5"/>
+    <text x="150" y="182" text-anchor="middle" fill="#e6edf3" font-size="16" font-weight="700">VFDs / PLC</text>
+    <text x="150" y="205" text-anchor="middle" fill="#7d8590" font-size="12.5">Pumps 101–104</text>
+    <text x="150" y="228" text-anchor="middle" fill="#7d8590" font-size="12.5">variable frequency drives</text>
+    <text x="150" y="258" text-anchor="middle" fill="#2ea043" font-size="12" font-weight="600">Modbus/TCP server</text>
+    <text x="150" y="278" text-anchor="middle" fill="#7d8590" font-size="11.5">the physical layer</text>
+  </g>
+
+  <!-- Edge -->
+  <g>
+    <rect x="360" y="150" width="220" height="150" rx="10" fill="#161b22" stroke="#3d444d" stroke-width="1.5"/>
+    <text x="470" y="182" text-anchor="middle" fill="#e6edf3" font-size="16" font-weight="700">Edge Gateway</text>
+    <text x="470" y="205" text-anchor="middle" fill="#7d8590" font-size="12.5">Sparkplug B edge node</text>
+    <text x="470" y="234" text-anchor="middle" fill="#58a6ff" font-size="12">Modbus  ⇄  MQTT bridge</text>
+    <text x="470" y="256" text-anchor="middle" fill="#7d8590" font-size="11.5">DCMD → Modbus write</text>
+    <text x="470" y="276" text-anchor="middle" fill="#7d8590" font-size="11.5">vibration telemetry out</text>
+  </g>
+
+  <!-- Broker -->
+  <g>
+    <rect x="680" y="150" width="220" height="150" rx="10" fill="#161b22" stroke="#f85149" stroke-width="2"/>
+    <text x="790" y="182" text-anchor="middle" fill="#e6edf3" font-size="16" font-weight="700">MQTT Broker</text>
+    <text x="790" y="205" text-anchor="middle" fill="#7d8590" font-size="12.5">Mosquitto : 1883</text>
+    <text x="790" y="234" text-anchor="middle" fill="#f85149" font-size="12" font-weight="600">anonymous · no TLS</text>
+    <text x="790" y="253" text-anchor="middle" fill="#f85149" font-size="12" font-weight="600">no topic ACL</text>
+    <text x="790" y="278" text-anchor="middle" fill="#7d8590" font-size="11.5">trusts every publisher</text>
+  </g>
+
+  <!-- Platform -->
+  <g>
+    <rect x="1000" y="150" width="200" height="150" rx="10" fill="#161b22" stroke="#3d444d" stroke-width="1.5"/>
+    <text x="1100" y="182" text-anchor="middle" fill="#e6edf3" font-size="16" font-weight="700">Platform</text>
+    <text x="1100" y="205" text-anchor="middle" fill="#7d8590" font-size="12.5">SCADA / analytics</text>
+    <text x="1100" y="234" text-anchor="middle" fill="#58a6ff" font-size="12">ISO 10816 + alarms</text>
+    <text x="1100" y="253" text-anchor="middle" fill="#7d8590" font-size="11.5">work orders</text>
+    <text x="1100" y="276" text-anchor="middle" fill="#7d8590" font-size="11.5">operator dashboard</text>
+  </g>
+
+  <!-- pipeline arrows -->
+  <!-- PLC <-> Edge -->
+  <line x1="262" y1="215" x2="356" y2="215" stroke="#8b98a5" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="358" y1="240" x2="264" y2="240" stroke="#8b98a5" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="309" y="205" text-anchor="middle" fill="#8b98a5" font-size="11">read</text>
+  <text x="309" y="258" text-anchor="middle" fill="#8b98a5" font-size="11">write</text>
+
+  <!-- Edge -> Broker -->
+  <line x1="582" y1="212" x2="676" y2="212" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrB)"/>
+  <text x="629" y="203" text-anchor="middle" fill="#58a6ff" font-size="10.5">BIRTH/DDATA</text>
+  <!-- Broker -> Edge (commands) -->
+  <line x1="678" y1="245" x2="584" y2="245" stroke="#8b98a5" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="629" y="264" text-anchor="middle" fill="#8b98a5" font-size="10.5">NCMD/DCMD</text>
+
+  <!-- Broker -> Platform -->
+  <line x1="902" y1="225" x2="996" y2="225" stroke="#58a6ff" stroke-width="2" marker-end="url(#arrB)"/>
+  <text x="949" y="216" text-anchor="middle" fill="#58a6ff" font-size="10.5">sub spBv1.0/#</text>
+
+  <!-- topic namespace strip -->
+  <rect x="360" y="330" width="840" height="34" rx="6" fill="#12161c" stroke="#232a34"/>
+  <text x="376" y="352" fill="#7d8590" font-size="12.5" font-family="Menlo, monospace">spBv1.0/NorthPlant/{NBIRTH|DBIRTH|DDATA|NCMD|DCMD}/EN-PumpHouse-01/Pump-10x</text>
+
+  <!-- ================= attacker ================= -->
+  <rect x="360" y="470" width="540" height="250" rx="10" fill="#1a1113" stroke="#f85149" stroke-width="1.5"/>
+  <text x="380" y="502" fill="#f85149" font-size="17" font-weight="700">Attacker on the plant network</text>
+  <text x="380" y="524" fill="#7d8590" font-size="12.5">anonymous MQTT client — no credentials, no exploit</text>
+
+  <g font-size="12.5">
+    <circle cx="392" cy="556" r="4" fill="#d29922"/>
+    <text x="406" y="560" fill="#e6edf3" font-weight="600">recon</text>
+    <text x="470" y="560" fill="#8b98a5">subscribe spBv1.0/# + force rebirth → full plant inventory</text>
+
+    <circle cx="392" cy="590" r="4" fill="#f85149"/>
+    <text x="406" y="594" fill="#e6edf3" font-weight="600">poison</text>
+    <text x="470" y="594" fill="#8b98a5">publish forged DDATA as the edge node → mask a real fault</text>
+
+    <circle cx="392" cy="624" r="4" fill="#f85149"/>
+    <text x="406" y="628" fill="#e6edf3" font-weight="600">command</text>
+    <text x="470" y="628" fill="#8b98a5">publish DCMD → edge writes Modbus → drive speed / stop</text>
+
+    <circle cx="392" cy="658" r="4" fill="#f85149"/>
+    <text x="406" y="662" fill="#e6edf3" font-weight="600">xss</text>
+    <text x="470" y="662" fill="#8b98a5">forged DBIRTH with markup in a metric name → operator's browser</text>
+  </g>
+  <text x="380" y="700" fill="#7d8590" font-size="11.5">CWE-306 · CWE-319 · CWE-862 · CWE-345 · CWE-77 · CWE-79</text>
+
+  <!-- attacker -> broker channel -->
+  <line x1="745" y1="466" x2="788" y2="304" stroke="#f85149" stroke-width="2.5" marker-end="url(#arrR)"/>
+  <text x="800" y="420" fill="#f85149" font-size="12" font-weight="600">publish / subscribe</text>
+  <text x="800" y="438" fill="#f85149" font-size="12" font-weight="600">(allowed — no auth)</text>
+
+  <!-- impact arrows -->
+  <!-- physical impact to PLC -->
+  <path d="M470 466 C 380 430, 150 380, 150 306" fill="none" stroke="#f85149" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arrR)"/>
+  <text x="196" y="430" fill="#f85149" font-size="11.5" font-weight="600">physical: drive moves</text>
+
+  <!-- integrity impact to platform -->
+  <path d="M900 560 C 1080 540, 1100 430, 1100 306" fill="none" stroke="#f85149" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arrR)"/>
+  <text x="1050" y="470" fill="#f85149" font-size="11.5" font-weight="600" text-anchor="middle">integrity: HMI lies</text>
+
+  <!-- legend -->
+  <text x="40" y="754" fill="#7d8590" font-size="11.5">
+    <tspan fill="#58a6ff">■</tspan> normal data flow    <tspan fill="#f85149">■</tspan> attacker action / impact    <tspan fill="#2ea043">■</tspan> physical process
+  </text>
+</svg>

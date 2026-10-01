@@ -1,0 +1,60 @@
+services:
+
+  broker:
+    image: eclipse-mosquitto:2.0
+    container_name: pdm-broker
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./broker/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+
+  plc-sim:
+    build: .
+    container_name: pdm-plc
+    command: python -m plc_sim.vfd
+    environment:
+      PLC_BIND: "0.0.0.0"
+      PLC_PORT: "502"
+    ports:
+      - "5020:502"        # expose Modbus so you can inspect it from the host
+    depends_on:
+      - broker
+
+  edge-node:
+    build: .
+    container_name: pdm-edge
+    command: python -m edge_node.node
+    environment:
+      MQTT_HOST: broker
+      PLC_HOST: plc-sim
+      # Speed up or slow down the seeded fault for your demo (override via shell):
+      FAULT_DELAY: "${FAULT_DELAY:-25}"
+      FAULT_RAMP: "${FAULT_RAMP:-240}"
+      SAMPLE_INTERVAL: "${SAMPLE_INTERVAL:-3}"
+    depends_on:
+      - broker
+      - plc-sim
+
+  platform:
+    build: .
+    container_name: pdm-platform
+    command: python -m platform_app.app
+    environment:
+      MQTT_HOST: broker
+      ALARM_SUSTAIN: "${ALARM_SUSTAIN:-6}"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - broker
+
+  # Convenience box on the plant network to run the attacker tooling from.
+  #   docker compose exec attacker python -m attacker.recon
+  attacker:
+    build: .
+    container_name: pdm-attacker
+    command: sleep infinity
+    environment:
+      MQTT_HOST: broker
+      PLC_HOST: plc-sim
+    depends_on:
+      - broker
